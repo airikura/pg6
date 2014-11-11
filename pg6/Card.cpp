@@ -10,25 +10,21 @@
 #include <string>
 #include <iostream>
 
-    int face;
-    int suit;//triangles 3, squares 2, diamonds 1, circles 0
 
-Card::Card(){
-    face = 0;
-    suit = 1;
-}
-Card::Card(int face, int suit){
-    this->face = face;
-    this->suit = suit;
-}
 
-    
+
 int Card::getRank() const{
+    if (isValidCard()){
     return (15 * suit) + face;
+    }
+    return -1;
 }
-    
 bool Card::operator< (const Card & other) const{
     return this->getRank() < other.getRank();
+}
+
+bool Card::operator==(const Card & other) const{
+    return this->getRank() == other.getRank();
 }
 std::string Card::getStringSuit(){
     switch (suit){
@@ -41,27 +37,35 @@ std::string Card::getStringSuit(){
         case 3:
             return "Triangles";
         default:
-            std::cout << "Suit doesn't exist." << std::endl;
-            return "";
+            //std::cout << "Invalid Suit" << std::endl;
+            return "invalidsuit";
     }
+}
+bool Card::isValidCard() const{
+    if ((suit == -1) || (face == 0)){
+        return false;
+    }
+        return true;
 }
 void Card::printCard(){
-    std::cout << getFace() << " of" << getStringSuit() << std::endl;
+    std::cout << getFace() << " of " << getStringSuit() << std::endl;
 }
-void Card::setFace(int face){
-    if (face >=1  && face <= 15){
-        this->face = face;
+void Card::setFace(int newFace){
+    if (newFace >=1  && newFace <= 15){
+        this->face = newFace;
     }
     else {
-        std::cout << "Face " << face << " not valid" << std::endl;
+        this->face = 0;
+        std::cout << "Face " << newFace << " not valid" << std::endl;
     }
 }
-void Card::setSuit(int suit){
-    if (suit >= 0 && suit < 4){
-        this->suit = suit;
+void Card::setSuit(int newSuit){
+    if (newSuit >= 0 && newSuit < 4){
+        this->suit = newSuit;
     }
     else {
-        std::cout << "Suit " << suit << " not valid" << std::endl;
+        this->suit = -1;
+        std::cout << "Suit " << newSuit << " not valid" << std::endl;
     }
 }
 

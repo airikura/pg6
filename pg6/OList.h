@@ -15,17 +15,41 @@
 
 class OList{
     
+    
 private: class Node{
     Node *next;
     std::string data;
-    public:
+    friend class OList;
+public:
     
     Node(Node * next,  std::string data){
-        Node * np;
-        np->next = next;
-        np->data = data;
+        this->next = next;
+        this->data = data;
     }
-    long size(Node *head){
+    
+    void setNext(Node * next){
+        this->next = next;
+    }
+    
+    void setData(std::string data){
+        this->data = data;
+    }
+    
+    Node* getNext(){
+        return next;
+    }
+    
+    std::string getData(){
+        return this->data;
+    }
+    
+};
+private:
+    Node * head;
+    std::string data;
+    
+    /*returns the size of the list*/
+    long size(){
         long size = 0;
         while (head){
             size++;
@@ -33,36 +57,56 @@ private: class Node{
         }
         return size;
     }
-    
-    void printList(Node * head){
+    /*prints the list*/
+    void printList(){
         while (head!= NULL){
-            std::cout << head->data;
-            head = head ->next;
+                std::cout << head->data;
+                head = head->next;
         }
     }
-    
-    void printRec(Node * head){
+    /*prints the list recursively by calling printRecHelper*/
+    void printRec(){
+        printRecHelper(head);
+    }
+    /*helper method for printRec*/
+    void printRecHelper(Node * head){
         if (head){
             std::cout << head->data;
-            printRec(head->next);
+            printRecHelper(head->next);
         }
     }
-    
+    /*prints the list in reverse*/
+    void printReverse(){
+        printReverseHelper(head);
+    }
+    /*helper method for printReverse*/
+    void printReverseHelper(Node * head){
+        if (head){
+            printReverseHelper(head->next);
+        }
+        std::cout << head->data;
+    }
+     /*add a node to the front of the list*/
     void addFront(Node **lptr, std::string val){
         Node *np = new Node(*lptr, val);
         * lptr = np;
     }
-    
-    void addTailR(Node **lptr, std::string val){
+    /*add a node recursively to the tail of the list*/
+    void addTailR(std::string val){
+        addTailRHelper(&head, val);
+    }
+    /*helper function for addTailR*/
+    void addTailRHelper(Node **lptr, std::string val){
         if (*lptr == NULL){
             Node * np = new Node(NULL, val);
             *lptr = np;
         }
         else {
-            addTailR(&((*lptr)->next), val);
+            addTailRHelper(&((*lptr)->next), val);
         }
     }
-    
+    /*add a node to the tail of the list*/
+
     void addTail(Node **lptr, std::string val){
         Node *np = new Node(NULL, val);
         if (*lptr == NULL){
@@ -73,38 +117,38 @@ private: class Node{
             while (head->next != NULL){
                 head = head->next;
             }
-            head-> next = np;
+            head->setNext(np);
         }
     }
-    
+    /*delete a node with data == val and return its index*/
     int deleteNode(Node **lptr, std::string val){
         Node * curr = *lptr;
         Node * prev = NULL;
-        while (curr && curr->data != val){
+        while (curr && curr->getData() != val){
             prev = curr;
-            curr = curr->next;
+            curr = curr->getNext();
         }
         if (!curr){
             return 0;
         }
         else if (prev == NULL){
-            *lptr = curr->next;
+            *lptr = curr->getNext();
         }
         else {
-            prev->next = curr->next;
+            prev->setNext(curr->getNext());
         }
-        curr->next = NULL;
+        curr->setNext(NULL);
         free(curr);
         return 1;
     }
-    
+     /*recursively delete a node with data == val and return its index*/
     int deleteR(Node **lptr, std::string val){
         if (*lptr == NULL){
             return 0;
         }
-        else if ((*lptr)->data == val){
+        else if ((*lptr)->getData() == val){
             Node * curr = *lptr;
-            *lptr = (*lptr)->next;
+            *lptr = (*lptr)->getNext();
             free(curr);
             return 1;
         }
@@ -112,7 +156,7 @@ private: class Node{
             return deleteR(&((*lptr)->next), val);
         }
     }
-    
+    /*clear the entire list and free memory*/
     void clearList(Node **lptr){
         if (*lptr != NULL){
             clearList(&(*lptr)->next);
@@ -120,37 +164,46 @@ private: class Node{
         free(*lptr);
         *lptr = NULL;
     }
-    
+    /*find the node with data == val and return it*/
     Node * find(Node * head, std::string val){
-        while (head && head-> data!= val){
-            head = head->next;
+        while (head && head-> getData()!= val){
+            head = head->getNext();
         }
         return head;
     }
-    
+    /*find the node with data oldVal and set data = newVal,
+     returns the new Node*/
     int replace(Node * head, std::string oldVal, std::string newVal){
         Node * found = find(head, oldVal);
         if (found){
-            found->data = newVal;
+            found->setData(newVal);
             return 1;
         }
         else {
             return 0;
         }
     }
-    
+    /*inserts the node in order (based on val) assuming the list is order*/
     Node * insert(Node **lptr, std::string val){
         if (*lptr == NULL){
             *lptr = new Node(NULL, val);
             return *lptr;
         }
-        else if (*lptr-> data == val){
-            
+        else if ((*lptr)->getData() == val){
+            return NULL;
+        }
+        else if ((*lptr)->getData() > val){
+            Node * np = new Node(*lptr, val);
+            *lptr = np;
+            return np;
+        }
+        else {
+            return insert(&((*lptr)->next), val);
         }
     }
     
     
-    };
+    
     
     
     
