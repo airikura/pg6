@@ -15,7 +15,5 @@ listtest: $(LISTFILES)
 gcov: $(FILES)
 	$(CC) $(OPTIONS) -o $(OUTPUT) $(FILES) $(GCOV)
 
-valgrindlist: $(LISTFILES)
-	$(CC) $(OPTIONS) -g -o $(OUTPUT) $(LISTFILES)
 clean: 
 	rm *.gcov *.gcda *.gcno *~

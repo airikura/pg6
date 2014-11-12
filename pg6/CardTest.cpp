@@ -26,14 +26,14 @@ using std::string;
 
 void testGetRank();
 void testIsValidCard();
-void testPrintCard();
+void testPrint();
 void testLessThan();
 void testCopyConstructor();
 
 int main(void){
     testGetRank();
     testIsValidCard();
-    testPrintCard();
+    testPrint();
     testLessThan();
     testCopyConstructor();
     return 0;
@@ -77,7 +77,7 @@ void testCopyConstructor(){
     
 }
 
-void testPrintCard(){
+void testPrint(){
     Card validCard = Card(1,0);
     Card validCard1 = Card(2, 1);
     Card validCard2 = Card(10,2);
@@ -88,34 +88,31 @@ void testPrintCard(){
     
     string fillerLine = string(10, '*');
     cout << "Next line of input should be: '1 of Circles'"<< endl;
-    validCard.printCard();
+    validCard.print();
     cout << fillerLine << endl;
     cout << "Next line of input should be: '2 of Diamonds'"<< endl;
-    validCard1.printCard();
+    validCard1.print();
     cout << fillerLine << endl;
     cout << "Next line of input should be: '10 of Squares'"<< endl;
-    validCard2.printCard();
+    validCard2.print();
     cout << fillerLine << endl;
     cout << "Next line of input should be: '15 of Triangles'"<< endl;
-    validCard3.printCard();
+    validCard3.print();
     cout << fillerLine << endl;
     
     cout << "Next line of input should be: '0 of Triangles'"<< endl;
-    invalidCard.printCard();
+    invalidCard.print();
     cout << fillerLine << endl;
     cout << "Next line of input should be: '0 of invalidsuit'"<< endl;
-    invalidCard1.printCard();
+    invalidCard1.print();
     cout << fillerLine << endl;
     cout << "Next line of input should be: '0 of invalidsuit'"<< endl;
-    invalidCard2.printCard();
+    invalidCard2.print();
     cout << fillerLine << endl;
-
-    
     
 }
-
+/*tests isValidCard, also tests constructor / set methods because they are called by constructor*/
 void testIsValidCard(){
-    //tests isValidCard, also tests constructor / set methods because they are called by constructor
     Card validCard = Card(1, 3);
     assert(validCard.isValidCard() == true);
     Card invalidCard = Card(-1, 3);
@@ -124,6 +121,26 @@ void testIsValidCard(){
     assert(invalidCard.isValidCard() == false);
     assert(invalidCard1.isValidCard() == false);
     assert(invalidCard2.isValidCard() == false);
+   
+    Card validStringCard = Card(1, "Triangles");
+    assert(validStringCard.isValidCard() == true);
+    Card invalidStringCard = Card(-1, "Triangles");
+    Card invalidStringCard1 = Card(-1, "Hello");
+    Card invalidStringCard2 = Card(16, "invalid");
+    assert(invalidStringCard.isValidCard() == false);
+    assert(invalidStringCard1.isValidCard() == false);
+    assert(invalidStringCard2.isValidCard() == false);
+    Card validStringCard3 = Card(1, "Triangles");
+    Card validStringCard4 = Card(1, "Squares");
+    Card validStringCard5 = Card(1, "Diamonds");
+    Card validStringCard6 = Card(1, "Circles");
+    assert(validStringCard3.isValidCard() == true);
+    assert(validStringCard4.isValidCard() == true);
+    assert(validStringCard5.isValidCard() == true);
+    assert(validStringCard6.isValidCard() == true);
+    
+    
+    
 }
 
 void testGetRank(){
@@ -145,7 +162,7 @@ void testGetRank(){
     Card invalidCard1 = Card(16, -1);
     assert(invalidCard.getRank() == -1);
     assert(invalidCard1.getRank() == -1);
-    invalidCard.printCard();
+    invalidCard.print();
 }
 
 

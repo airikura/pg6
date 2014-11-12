@@ -19,14 +19,19 @@ int Card::getRank() const{
     }
     return -1;
 }
-bool Card::operator< (const Card & other) const{
-    return this->getRank() < other.getRank();
-}
+    bool Card:: operator< (const Card & other) const {
+        return this->getRank() < other.getRank();
+    }
+
 
 bool Card::operator==(const Card & other) const{
     return this->getRank() == other.getRank();
 }
-std::string Card::getStringSuit(){
+
+bool Card::operator!=(const Card & other) const{
+    return !(this->getRank() == other.getRank());
+}
+std::string Card::getSuit(){
     switch (suit){
         case 0:
             return "Circles";
@@ -47,8 +52,18 @@ bool Card::isValidCard() const{
     }
         return true;
 }
-void Card::printCard(){
-    std::cout << getFace() << " of " << getStringSuit() << std::endl;
+
+
+
+void makeLowerCase(std::string upper){
+    for (std::string::iterator it = upper.begin(); it < upper.end(); it++){
+        tolower(*it);
+    }
+}
+
+
+void Card::print(){
+    std::cout << getFace() << " of " << getSuit() << std::endl;
 }
 void Card::setFace(int newFace){
     if (newFace >=1  && newFace <= 15){
@@ -68,6 +83,35 @@ void Card::setSuit(int newSuit){
         std::cout << "Suit " << newSuit << " not valid" << std::endl;
     }
 }
+
+void Card::setSuit(std::string newSuit){
+    bool first = true;
+    for (std::string::iterator it = newSuit.begin(); it < newSuit.end(); it++){
+        if (first){
+            toupper(*it);
+            first = false;
+        }
+        else {
+            tolower(*it);
+        }
+    }
+    if (newSuit == "Circles"){
+        suit = 0;
+    }
+    else if (newSuit == "Diamonds"){
+        suit = 1;
+    }
+    else if (newSuit == "Squares"){
+        suit = 2;
+    }
+    else if (newSuit == "Triangles"){
+        suit = 3;
+    }
+    else{
+        suit = -1;
+    }
+}
+
 
     
     
